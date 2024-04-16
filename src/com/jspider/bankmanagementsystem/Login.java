@@ -1,0 +1,137 @@
+package com.jspider.bankmanagementsystem;
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+
+
+/**
+ *
+ * @author 91938
+ */
+public class Login extends JFrame implements ActionListener{
+    JButton login,cleaar,signUp;
+    JTextField cardTextField;
+    JPasswordField pinTextField;
+    	Login()
+	{
+		setTitle("ATM");
+                setLayout(null);
+		ImageIcon icon=new ImageIcon(ClassLoader.getSystemResource("icons/download.jpeg"));
+                Image icon2=icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                ImageIcon icon3=new ImageIcon(icon2);
+		JLabel jLabel=new JLabel(icon3);
+                jLabel.setBounds(70,10,100,100);
+		add(jLabel);
+                
+                JLabel text=new JLabel("welcome to bank");
+                text.setFont(new Font("Osward",Font.BOLD,38));
+                text.setBounds(200, 40, 400, 40);
+                add(text);
+                
+                 JLabel cardno=new JLabel("Card No");
+                cardno.setFont(new Font("Ralevay",Font.BOLD,38));
+                cardno.setBounds(120, 150, 150, 30);
+                add(cardno);
+                
+                 cardTextField=new JTextField();
+                cardTextField.setBounds(300,150,230,30);
+                cardTextField.setFont(new Font("Arial",Font.BOLD,14));
+                add(cardTextField);
+                
+                 JLabel pin=new JLabel(" PIN");
+                pin.setFont(new Font("Osward",Font.BOLD,38));
+                pin.setBounds(120, 220, 230, 40);
+                add(pin);
+                
+                 pinTextField=new JPasswordField();
+                pinTextField.setBounds(300,220,250,30);
+                pinTextField.setFont(new Font("Arial",Font.BOLD,14));
+                add(pinTextField);
+                
+                 login=new JButton("SIGN IN");
+                login.setBackground(Color.black);
+                login.setForeground(Color.WHITE);
+                login.setBounds(300, 300, 100, 30);
+                login.addActionListener(this);
+                add(login);
+                
+                   cleaar=new JButton("CLEAR");
+                cleaar.setBackground(Color.black);
+                cleaar.setForeground(Color.WHITE);
+                cleaar.setBounds(430, 300, 100, 30);
+                cleaar.addActionListener(this);
+                add(cleaar);
+                
+                  signUp=new JButton("SIGN UP");
+                signUp.setBackground(Color.black);
+                signUp.setForeground(Color.WHITE);
+                signUp.setBounds(300, 350, 230, 30);
+                signUp.addActionListener(this);
+                add(signUp);
+                
+                getContentPane().setBackground(Color.white);
+		setSize(800,480);
+		setVisible(true);
+		setLocation(350,200);
+		
+	}
+        public void actionPerformed(ActionEvent actionEvent)
+        {
+             
+            if(actionEvent.getSource() == cleaar)
+            {
+                cardTextField.setText("");
+                pinTextField.setText("");
+            }
+            else if(actionEvent.getSource() == login)
+            {
+               Conn conn=new Conn();
+               String cardnumber=cardTextField.getText();
+               String pinnumber=pinTextField.getText();
+               String query="select * from projectbank.login where cardnumber= '"+cardnumber+"' and pin= '"+pinnumber+"' ";
+               try{
+                   ResultSet rs=conn.st.executeQuery(query);
+                   if(rs.next())
+                   {
+                       String cardnumber2=cardnumber;
+                       String pin2=cardnumber;
+                       if(cardnumber2.equals(cardnumber) && pin2.equals(pinnumber))
+                       {
+                           setVisible(false);
+                       new Trancsactions(pinnumber).setVisible(true);
+                       
+                       }
+
+                       
+                       
+                   }  
+                    else
+                   {
+                       
+                       JOptionPane.showMessageDialog(null, "Incorrect card number & pin");
+                       
+                   }
+               }catch(Exception e)
+               {
+                   System.out.println(e);
+               }
+            }
+            else if(actionEvent.getSource() == signUp)
+            {
+                setVisible(false);
+                new SignUpone().setVisible(true);
+              
+            }
+            
+
+        }
+    public static void main(String[] args) {
+        new Login().setVisible(true);
+    }
+}
